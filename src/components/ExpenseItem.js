@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { TiDelete } from 'react-icons/ti';
+import { BiSolidPlusCircle, BiSolidMinusCircle } from "react-icons/bi";
 import { AppContext } from '../context/AppContext';
 
 const ExpenseItem = (props) => {
-    const { dispatch } = useContext(AppContext);
+    const context = useContext(AppContext);
 
     const handleDeleteExpense = () => {
-        dispatch({
+        context.dispatch({
             type: 'DELETE_EXPENSE',
             payload: props.id,
         });
@@ -18,18 +19,30 @@ const ExpenseItem = (props) => {
             cost: 10,
         };
 
-        dispatch({
+        context.dispatch({
             type: 'ADD_EXPENSE',
             payload: expense
         });
+    }
 
+    const decreaseAllocation = (name) => {
+        const expense = {
+            name: name,
+            cost: 10,
+        };
+
+        context.dispatch({
+            type: 'RED_EXPENSE',
+            payload: expense
+        });
     }
 
     return (
         <tr>
         <td>{props.name}</td>
-        <td>£{props.cost}</td>
-        <td><button onClick={event=> increaseAllocation(props.name)}>+</button></td>
+        <td>{context.currency}{props.cost}</td>
+        <td><BiSolidPlusCircle style={{color: "#63b863"}} size='2em' onClick={event=> increaseAllocation(props.name)}></BiSolidPlusCircle></td>
+        <td><BiSolidMinusCircle style={{color: "red"}} size='2em' onClick={event=> decreaseAllocation(props.name)}></BiSolidMinusCircle></td>
         <td><TiDelete size='1.5em' onClick={handleDeleteExpense}></TiDelete></td>
         </tr>
     );
